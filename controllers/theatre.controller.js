@@ -9,9 +9,17 @@ const createTheatre = async (req, res) => {
 
     try {
         const response = await theatreService.createTheatre(req.body);
+
+        if(response.err){
+            errorResponseBody.err = response.err;
+            errorResponseBody.message = "Validation failed on few parameters of the request body";
+            return res.status(response.code).json(errorResponseBody);
+        }
+
         successResponseBody.data = response;
         successResponseBody.message = "Successfully created a theatre";
         return res.status(201).json(successResponseBody);
+
     } catch (error) {
         console.log(error);
         errorResponseBody.err = error;

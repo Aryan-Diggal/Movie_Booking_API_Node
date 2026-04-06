@@ -1,3 +1,4 @@
+const { response } = require("express");
 const Movie = require("../models/movie.model");
 const movieService = require("../services/movie.service");
 const {
@@ -6,27 +7,25 @@ const {
 } = require("../utils/responseBody")
 
 
-/**
- * Controller function to create a new movie
- * @returns Movie created
- */
-
-
 
 const createMovie = async (req, res) => {
     try {
 
-        const movie = await movieService.createMovie(req.body);
+        const response = await movieService.createMovie(req.body);
 
-        successResponseBody.data = movie;
+        if(response.err){
+            errorResponseBody.err = response.err;
+            errorResponseBody.message = "Validation failed on a few parameters of the request body"
+            return res.status(response.code).json(errorResponseBody);
+        }
+
+        successResponseBody.data = response;
         successResponseBody.message = "Successfully created the movie";
         return res.status(201).json(successResponseBody)
 
-    } catch (error) {
+    } catch (err) {
 
-        console.log(error);
-
-        errorResponseBody.err = error;
+        errorResponseBody.err = err;
         return res.status(500).json(errorResponseBody)
     }
 };
@@ -66,8 +65,53 @@ const getMovie = async (req, res) => {
     }
 }
 
+
+const updateMovie = async (req, res) => {
+
+    try {
+        
+        const response = await movieService.updateMovie(req.params.id, req.body);
+        if(response.err){
+            errorResponseBody.err = response.err;
+            errorResponseBody.message = "The updates that we are trying to apply doesn't validate the schema";
+            return res.status(response.code).json(errorResponseBody);
+        }
+        
+        successResponseBody.data = response; 
+        return res.status(200).json(successResponseBody);
+
+    } catch (err) {
+        errorResponseBody.err = err;
+        return res.status(500).json(errorResponseBody);
+
+    }
+
+}
+
+const FindMovie = async (req, res) => {
+    
+    try {
+        const response = await movieService.fetchMovies(req.query);
+
+        if(response.err){
+            errorResponseBody.err = response.err;
+            errorResponseBody.message = "Could not find the movies !!";
+            return res.status(response.code).json(errorResponseBody);
+        }    
+
+        successResponseBody.data = response; 
+        return res.status(200).json(successResponseBody);
+
+    } catch (error) {
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody);
+    }
+}
+
 module.exports = {
     createMovie,
     deleteMovie,
     getMovie,
+    updateMovie,
+    FindMovie,
 }

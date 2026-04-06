@@ -14,6 +14,7 @@ const theatreSchema = new mongoose.Schema({
     },
     pincode: {
         type: Number,
+        required: true,
     },
     address: {
         type: String,

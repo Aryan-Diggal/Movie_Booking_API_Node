@@ -1,4 +1,5 @@
 const Movie = require("../models/movie.model");
+const { errorResponseBody } = require("../utils/responseBody");
 
 const createMovie = async (data) => {
 
@@ -24,10 +25,26 @@ const createMovie = async (data) => {
 }
 
 const deleteMovie = async (id) => {
-    const response = await Movie.deleteOne({
-        _id: id,
-    });
-    return response;
+    
+    try {
+        const response = await Movie.findByIdAndDelete(id);
+
+        if(!response){
+            return {
+                err: "There is no such movie exists with this ID",
+                code: 404
+            }
+        }
+
+        return response;
+        
+    } catch (error) {
+        console.log(error);
+        throw error;
+        
+    }
+    
+    
 }
 
 const getMovieById = async (id) => {

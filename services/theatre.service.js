@@ -77,8 +77,12 @@ const getAllTheatre = async (filter) => {
 
     let query = {};
 
-    if(filter.name){
+    if (filter.name) {
         query.name = filter.name;
+    }
+
+    if (filter.city) {
+        query.city = filter.city;
     }
 
     const theatre = await Theatre.find(query);

@@ -73,8 +73,30 @@ const getTheatreById = async (id) => {
 }
 
 
+const getAllTheatre = async (filter) => {
+
+    let query = {};
+
+    if(filter.name){
+        query.name = filter.name;
+    }
+
+    const theatre = await Theatre.find(query);
+
+    if(!theatre){
+        return {
+            err: "Not able to find the queries movies",
+            code: 404
+        }
+    }
+
+    return theatre;
+
+}
+
 module.exports = {
     createTheatre,
     destroyTheatre,
     getTheatreById,
+    getAllTheatre,
 }

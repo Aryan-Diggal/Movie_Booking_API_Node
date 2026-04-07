@@ -28,6 +28,57 @@ const createTheatre = async (req, res) => {
     
 }
 
+const removeTheatre = async (req, res) => {
+
+    try {
+
+        const response = await theatreService.destroyTheatre(req.params.id);
+
+        if(response.err){
+            errorResponseBody.err = response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully deleted the theatre";
+        return res.status(200).json(successResponseBody);
+
+    } catch (error) {
+
+        console.log(error);
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody);
+
+    }
+    
+}
+
+const findTheatre = async (req, res) => {
+
+    try {
+        const response = await theatreService.getTheatreById(req.params.id);
+
+        if(response.err){
+            errorResponseBody.err = response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully fetched the data of the theatre";
+        return res.status(200).json(successResponseBody);
+
+    } catch (error) {
+        console.log(error);
+        errorResponseBody.err = error;
+        return res.status(500).json(errorResponseBody);
+    }
+
+    
+
+}
+
 module.exports = {
     createTheatre,
+    removeTheatre,
+    findTheatre,
 }

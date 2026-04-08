@@ -1,5 +1,10 @@
 const Theatre = require("../models/theatre.model");
 
+/**
+ * 
+ * @param data -> Object containing details of the new theatre to be created
+ * @returns -> returns the new theatre object created
+ */
 const createTheatre = async (data) => {
 
     try {
@@ -28,6 +33,12 @@ const createTheatre = async (data) => {
     
 }
 
+
+/**
+ * 
+ * @param id -> the unique _id using which we can identify the theatre to be deleted
+ * @returns -> returns the deleted theatre object 
+ */
 const destroyTheatre = async (id) => {
     try {
         
@@ -47,9 +58,13 @@ const destroyTheatre = async (id) => {
         throw error;
     }
 
-    
-
 }
+
+/**
+ * 
+ * @param id -> it is the unique _id based on which we will fetch a theatre
+ * @returns -> returns the fetched theatre
+ */
 
 const getTheatreById = async (id) => {
 
@@ -72,6 +87,11 @@ const getTheatreById = async (id) => {
     
 }
 
+/**
+ * 
+ * @param filter -> the data in "filter" to be used to filter out theatres based on city/pincode 
+ * @returns -> returns an object with the filtered content of theatres
+ */
 
 const getAllTheatre = async (filter) => {
 
@@ -98,9 +118,38 @@ const getAllTheatre = async (filter) => {
 
 }
 
+/**
+ * 
+ * @param id -> it is the unique _id based on which we will find the theatre that we need to update
+ * @param data -> object that contains the new data which is to be updated in the db
+ * @returns -> returns the new updated theatre details
+ */
+
+const updateTheatre = async (id, data) => {
+
+    try {
+        const response = await Theatre.findByIdAndUpdate(id, data, {returnDocument: 'after', runValidators: true});
+        
+        if(!response){
+            return {
+                err: "Not able to find the theatre with this id",
+                code: 404
+            }
+        }
+
+        return response;
+
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+    
+}
+
 module.exports = {
     createTheatre,
     destroyTheatre,
     getTheatreById,
     getAllTheatre,
+    updateTheatre,
 }

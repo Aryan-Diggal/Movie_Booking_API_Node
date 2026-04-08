@@ -1,5 +1,3 @@
-const { response } = require("express");
-const Movie = require("../models/movie.model");
 const movieService = require("../services/movie.service");
 const {
     successResponseBody, 

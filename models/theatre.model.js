@@ -19,7 +19,12 @@ const theatreSchema = new mongoose.Schema({
     },
     address: {
         type: String,
+    },
+    moives: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Movie'
     }
+
 }, {timestamps: true});
 
 const Theatre = mongoose.model("Theatre", theatreSchema);

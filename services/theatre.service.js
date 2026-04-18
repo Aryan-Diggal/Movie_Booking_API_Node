@@ -94,27 +94,46 @@ const getTheatreById = async (id) => {
  */
 
 const getAllTheatre = async (filter) => {
+    try {
+        let query = {};
+        let pagination = {};
 
-    let query = {};
-
-    if (filter.name) {
-        query.name = filter.name;
-    }
-
-    if (filter.city) {
-        query.city = filter.city;
-    }
-
-    const theatre = await Theatre.find(query);
-
-    if(!theatre){
-        return {
-            err: "Not able to find the queries movies",
-            code: 404
+        if (filter && filter.name) {
+            query.name = filter.name;
         }
-    }
 
-    return theatre;
+        if (filter && filter.city) {
+            query.city = filter.city;
+        }
+
+        if (filter && filter.pincode){
+            query.pincode = filter.pincode;
+        }
+        
+        if(filter && filter.limit){
+            pagination.limit = filter.limit;
+        }
+
+        if(filter && filter.skip){
+            let perPage = (filter.perPage) ? filter.perPage : filter.limit;
+            pagination.skip = filter.skip*perPage;
+        }
+
+        const theatre = await Theatre.find(query, {}, pagination);
+
+        if(!theatre){
+            return {
+                err: "Not able to find the queries movies",
+                code: 404
+            }
+        }
+
+        return theatre;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+    
 
 }
 

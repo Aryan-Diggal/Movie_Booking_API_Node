@@ -110,6 +110,10 @@ const getAllTheatre = async (filter) => {
             query.pincode = filter.pincode;
         }
         
+        if(filter && filter.movieId){
+            query.movies = {$all: filter.movieId};
+        }
+
         if(filter && filter.limit){
             pagination.limit = filter.limit;
         }
@@ -189,6 +193,9 @@ const updateMoviesInTheatres = async (theatreId, movieIds, insert) => {
             )
             
         }   
+
+        // All these "addToSet, each, pull, in" are MongoDB opearators
+
         const theatre = await Theatre.findById(theatreId);
         return theatre.populate("movies");
 

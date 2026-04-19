@@ -47,7 +47,12 @@ const routes = (app) => {
         "/mba/api/v1/theatres/:id/movies",
         theatreMiddlewares.validateUpdateMovieRequest,
         theatreController.updateMovies,
-    )
+    );
+
+    app.get(
+        "/mba/api/v1/theatres/:id/movies",
+        theatreController.getMoviesOfATheatre,
+    );
 
 }
 

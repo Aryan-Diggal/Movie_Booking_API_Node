@@ -13,8 +13,8 @@ const app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-mongoose.set('debug', true);
-
+// mongoose.set('debug', true);
+// Above line to be used when we need to understand a particular DB query 
 
 // Routes
 movieRoutes(app); // invoking movie routes

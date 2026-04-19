@@ -54,6 +54,11 @@ const routes = (app) => {
         theatreController.getMoviesOfATheatre,
     );
 
+    app.get(
+        "/mba/api/v1/theatres/:theatreId/movies/:movieId",
+        theatreController.checkMovie,
+    );
+
 }
 
 module.exports = routes;

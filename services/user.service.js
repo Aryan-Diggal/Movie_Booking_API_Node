@@ -37,6 +37,29 @@ const createUser = async (data) => {
 
 }
 
+const getUserByEmail = async (email) => {
+    try {
+        
+        const response = await User.findOne({
+            email: email
+        });
+        
+        if(!response){
+            throw {
+                err: "There is no user with this email Id",
+                code: 404,
+            }
+        }
+
+        return response;
+
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 module.exports = {
     createUser,
+    getUserByEmail,
 }

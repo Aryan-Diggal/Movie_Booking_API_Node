@@ -40,8 +40,6 @@ const signin = async (req, res) => {
             {expiresIn: "1h"}
         );
 
-        console.log(jwt.verify(token, process.env.AUTH_KEY));
-
         successResponseBody.message = "Successfully logged in";
         successResponseBody.data = {
             email: user.email,

@@ -94,27 +94,50 @@ const getTheatreById = async (id) => {
  */
 
 const getAllTheatre = async (filter) => {
+    try {
+        let query = {};
+        let pagination = {};
 
-    let query = {};
-
-    if (filter.name) {
-        query.name = filter.name;
-    }
-
-    if (filter.city) {
-        query.city = filter.city;
-    }
-
-    const theatre = await Theatre.find(query);
-
-    if(!theatre){
-        return {
-            err: "Not able to find the queries movies",
-            code: 404
+        if (filter && filter.name) {
+            query.name = filter.name;
         }
-    }
 
-    return theatre;
+        if (filter && filter.city) {
+            query.city = filter.city;
+        }
+
+        if (filter && filter.pincode){
+            query.pincode = filter.pincode;
+        }
+        
+        if(filter && filter.movieId){
+            query.movies = {$all: filter.movieId};
+        }
+
+        if(filter && filter.limit){
+            pagination.limit = filter.limit;
+        }
+
+        if(filter && filter.skip){
+            let perPage = (filter.perPage) ? filter.perPage : filter.limit;
+            pagination.skip = filter.skip*perPage;
+        }
+
+        const theatre = await Theatre.find(query, {}, pagination);
+
+        if(!theatre){
+            return {
+                err: "Not able to find the queries movies",
+                code: 404
+            }
+        }
+
+        return theatre;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+    
 
 }
 
@@ -146,10 +169,105 @@ const updateTheatre = async (id, data) => {
     
 }
 
+/**
+ * 
+ * @param theatreId -> unique id of the theatre for which we want to update movies 
+ * @param movieIds -> array of movie ids that are expected to be updated in the theatre
+ * @param insert -> boolean that tells whether we want to insert movies or remove them 
+ * @returns -> updated theatre object
+ */
+const updateMoviesInTheatres = async (theatreId, movieIds, insert) => {
+    try {
+        if(insert){
+            // We need to add movies
+            await Theatre.updateOne(
+                {_id: theatreId},
+                {$addToSet: {movies: {$each: movieIds}}}
+            );
+        
+        } else {
+            // We need to remove movies
+            await Theatre.updateOne(
+                {_id: theatreId},
+                {$pull: {movies: {$in: movieIds}}}
+            )
+            
+        }   
+
+        // All these "addToSet, each, pull, in" are MongoDB opearators
+
+        const theatre = await Theatre.findById(theatreId);
+        return theatre.populate("movies");
+
+    } catch (error) {
+        if(error.name == "TypeError"){
+            return {
+                code: 404,
+                err: "No theatre found for the given id"
+            }
+        }
+        console.log("Error is",error);
+        throw error;
+    }
+    
+
+}
+
+const getMoviesInATheatre = async (id) => {
+    
+    try {
+        const theatre = await Theatre.findById(id, {name:1, movies:1, address:1}).populate("movies");
+        
+        if(!theatre){
+            return {
+                err: "Not able to find the theatre with this id",
+                code: 404
+            }
+        
+        }
+
+        return theatre;
+    
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+
+}
+
+const checkMovieInATheatre = async (theatreId, movieId) => {
+
+    try {
+
+        const theatre = await Theatre.findById(theatreId);
+
+        if(!theatre){
+            return {
+                err: "Not able to find the theatre with this id",
+                code: 404
+            }
+        
+        }
+
+        return theatre.movies.indexOf(movieId) != -1;
+
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+    
+
+
+}
+
 module.exports = {
     createTheatre,
     destroyTheatre,
     getTheatreById,
     getAllTheatre,
     updateTheatre,
+    updateMoviesInTheatres,
+    getMoviesInATheatre,
+    checkMovieInATheatre,
+    
 }

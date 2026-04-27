@@ -40,7 +40,7 @@ const routes = (app) => {
     app.get(
         "/mba/api/v1/movies",
         movieController.FindMovie
-    )
+    );
 }
 
 module.exports = routes;

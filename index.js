@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 
 const movieRoutes = require("./routes/movie.routes");
 const theatreRoutes = require("./routes/theatre.routes");
+const autRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
 
 env.config();
 const app = express();  
@@ -13,10 +15,14 @@ const app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
+// mongoose.set('debug', true);
+// Above line to be used when we need to understand a particular DB query 
+
 // Routes
 movieRoutes(app); // invoking movie routes
 theatreRoutes(app); // inovking theatre routes
-
+autRoutes(app); // inovking auth routes
+userRoutes(app); // invoking user routes
 
 
 app.listen(process.env.PORT, async () => {

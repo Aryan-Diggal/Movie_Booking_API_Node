@@ -1,4 +1,5 @@
 const Theatre = require("../models/theatre.model");
+const {STATUS} = require("../utils/constants")
 
 /**
  * 
@@ -47,7 +48,7 @@ const destroyTheatre = async (id) => {
         if(!theatre){
             return {
                 err: "No record of a theatre found for the given id",
-                code: 404,
+                code: STATUS.NOT_FOUND,
             }
         }
         

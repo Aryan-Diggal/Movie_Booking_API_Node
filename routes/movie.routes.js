@@ -1,6 +1,6 @@
 const movieController = require("../controllers/movie.controller");
 const movieMiddlewares = require("../midllewares/movie.middlewares");
-
+const authMiddlewares = require("../midllewares/auth.middlewares");
 
 const routes = (app) => {
     //rourtes function takes express app object as parameter
@@ -8,13 +8,17 @@ const routes = (app) => {
     // CREATE
     app.post(
         "/mba/api/v1/movies",
+        authMiddlewares.isAuthenticated,
+        authMiddlewares.isAdminOrClient,
         movieMiddlewares.validateMovieCreateRequest, 
         movieController.createMovie
     );
 
     // DELETE 
     app.delete(
-        "/mba/api/v1/movies/:id", 
+        "/mba/api/v1/movies/:id",
+        authMiddlewares.isAuthenticated,
+        authMiddlewares.isAdminOrClient,
         movieController.deleteMovie
     );
 
@@ -27,12 +31,16 @@ const routes = (app) => {
     // UPDATE
     app.put(
         "/mba/api/v1/movies/:id",
+        authMiddlewares.isAuthenticated,
+        authMiddlewares.isAdminOrClient,
         movieController.updateMovie
     );
 
     // UPDATE
     app.patch(
         "/mba/api/v1/movies/:id",
+        authMiddlewares.isAuthenticated,
+        authMiddlewares.isAdminOrClient,
         movieController.updateMovie
     );
 

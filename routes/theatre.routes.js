@@ -8,6 +8,8 @@ const routes = (app) => {
     // CREATE
     app.post(
         "/mba/api/v1/theatres",
+        authMiddlewares.isAuthenticated,
+        authMiddlewares.isAdminOrClient,
         theatreMiddlewares.validateTheatreCreateRequest,
         theatreController.createTheatre
     );

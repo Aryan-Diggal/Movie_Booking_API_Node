@@ -114,7 +114,7 @@ const updateUserRoleOrStatus = async (data, userId) => {
                 err[key] = error.errors[key].message;
             })
 
-            return {err: err, code: 400};
+            throw {err: err, code: 400};
 
         }
 

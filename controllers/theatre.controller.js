@@ -4,6 +4,8 @@ const {
     errorResponseBody
 } = require("../utils/responseBody")
 
+const {STATUS} = require("../utils/constants")
+
 
 const createTheatre = async (req, res) => {
 
@@ -18,12 +20,12 @@ const createTheatre = async (req, res) => {
 
         successResponseBody.data = response;
         successResponseBody.message = "Successfully created a theatre";
-        return res.status(201).json(successResponseBody);
+        return res.status(STATUS.OK).json(successResponseBody);
 
     } catch (error) {
         console.log(error);
         errorResponseBody.err = error;
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SEVER_ERROR).json(errorResponseBody);
     }
     
 }
@@ -41,13 +43,13 @@ const removeTheatre = async (req, res) => {
 
         successResponseBody.data = response;
         successResponseBody.message = "Successfully deleted the theatre";
-        return res.status(200).json(successResponseBody);
+        return res.status(STATUS.OK).json(successResponseBody);
 
     } catch (error) {
 
         console.log(error);
         errorResponseBody.err = error;
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SEVER_ERROR).json(errorResponseBody);
 
     }
     
@@ -65,12 +67,12 @@ const findTheatre = async (req, res) => {
 
         successResponseBody.data = response;
         successResponseBody.message = "Successfully fetched the data of the theatre";
-        return res.status(200).json(successResponseBody);
+        return res.status(STATUS.OK).json(successResponseBody);
 
     } catch (error) {
         console.log(error);
         errorResponseBody.err = error;
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SEVER_ERROR).json(errorResponseBody);
     }
 
     
@@ -89,12 +91,12 @@ const getAllTheatre = async (req, res) => {
 
         successResponseBody.data = response;
         successResponseBody.message = "Successfully fetched the data of the theatre";
-        return res.status(200).json(successResponseBody);
+        return res.status(STATUS.OK).json(successResponseBody);
 
     } catch (error) {
         console.log(error);
         errorResponseBody.err = error;
-        return res.status(500).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SEVER_ERROR).json(errorResponseBody);
     }
 
 }

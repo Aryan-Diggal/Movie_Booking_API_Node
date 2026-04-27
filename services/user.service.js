@@ -97,7 +97,7 @@ const updateUserRoleOrStatus = async (data, userId) => {
         if(!response){
             throw {
                 err: "No user found with this Id",
-                code: 404
+                code: STATUS.NOT_FOUND
             }
         }
 

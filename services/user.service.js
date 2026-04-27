@@ -1,5 +1,5 @@
 const User = require("../models/user.model");
-const {USER_ROLE, USER_STATUS} = require("../utils/constants");
+const {USER_ROLE, USER_STATUS, STATUS} = require("../utils/constants");
 
 const createUser = async (data) => {
 
@@ -114,7 +114,7 @@ const updateUserRoleOrStatus = async (data, userId) => {
                 err[key] = error.errors[key].message;
             })
 
-            throw {err: err, code: 400};
+            throw {err: err, code: STATUS.BAD_REQUEST};
 
         }
 

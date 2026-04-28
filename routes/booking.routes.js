@@ -19,7 +19,24 @@ const routes = (app) => {
         bookingController.update,
     );
 
+    app.get(
+        "/mba/api/v1/bookings",
+        authMiddlewares.isAuthenticated,
+        bookingController.getBookings,
+    );
 
+    app.get(
+        "/mba/api/v1/bookings/all",
+        authMiddlewares.isAuthenticated,
+        authMiddlewares.isAdmin,
+        bookingController.getAllBookings,
+    );
+
+    app.get(
+        "/mba/api/v1/bookings/:id",
+        authMiddlewares.isAuthenticated,
+        bookingController.getBookingById,
+    );
 }
 
 module.exports = routes;

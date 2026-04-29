@@ -10,11 +10,11 @@ const createPayment = async (data) => {
 
         const booking = await Booking.findById(data.bookingId);
 
-        // const show = await Show.findOne({
-        //     movieId: booking.movieId,
-        //     theatreId: booking.theatreId,
-        //     timing: booking.timing
-        // });
+        const show = await Show.findOne({
+            movieId: booking.movieId,
+            theatreId: booking.theatreId,
+            timing: booking.timing
+        });
 
         if(!booking) {
             throw {
@@ -60,9 +60,9 @@ const createPayment = async (data) => {
 
         payment.status = PAYMENT_STATUS.success;
         booking.status = BOOKING_STATUS.successfull;
-        //show.noOfSeats -= booking.noOfSeats;
+        show.noOfSeats -= booking.noOfSeats;
 
-        //await show.save();
+        await show.save();
         await booking.save();
         await payment.save();
 

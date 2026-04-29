@@ -101,7 +101,7 @@ const getAllPayments = async (userId) => {
 
         const bookings = await Booking.find(filter, 'id');
 
-        const payments = await Payment.find({booking: {$in: bookings}});
+        const payments = await Payment.find({bookingId: {$in: bookings}});
 
         return payments;
     } catch (error) {

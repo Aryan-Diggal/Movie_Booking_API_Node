@@ -39,7 +39,7 @@ const getPaymentDetailsById = async (req, res) => {
 
         successResponseBody.data = response;
         successResponseBody.message = "Successfully fetched the booking and payment details";
-        
+
         return res.status(STATUS.OK).json(successResponseBody);
 
     } catch (error) {
@@ -57,10 +57,13 @@ const getPaymentDetailsById = async (req, res) => {
 const getAllPayments = async (req, res) => {
     try {
         const response = await paymentService.getAllPayments(req.user);
+
         successResponseBody.data = response;
         successResponseBody.message = "Successfully fetched all the payments";
         return res.status(STATUS.OK).json(successResponseBody);
+
     } catch (error) {
+        
         errorResponseBody.err = error;
         return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
     }

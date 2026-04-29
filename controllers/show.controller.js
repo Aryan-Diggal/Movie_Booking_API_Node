@@ -10,7 +10,7 @@ const create = async (req, res) => {
         successResponseBody.data = response;
         successResponseBody.message = "Successfully created the show";
 
-        return res.status(STATUS.OK).json(successResponseBody);
+        return res.status(STATUS.CREATED).json(successResponseBody);
 
 
     } catch (error) {
@@ -23,6 +23,29 @@ const create = async (req, res) => {
     }
 }
 
+
+const getShows = async (req, res) => {
+    try {
+        
+        const response = await showService.getShows(req.query);
+        
+        successResponseBody.data = response;
+        successResponseBody.message = "Successfully fetched the movie shows";
+
+        return res.status(STATUS.OK).json(successResponseBody);
+
+    } catch (error) {
+        if(error.err) {
+            errorResponseBody.err = error.err;
+            return res.status(error.code).json(errorResponseBody);
+        }
+        errorResponseBody.err = error;
+        return res.status(STATUS.INTERNAL_SEVER_ERROR).json(errorResponseBody)
+    }
+} 
+
+
 module.exports = {
     create,
+    getShows,
 }

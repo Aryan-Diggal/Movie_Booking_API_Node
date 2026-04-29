@@ -1,6 +1,10 @@
 const paymentService = require('../services/payment.service');
 const { BOOKING_STATUS, STATUS } = require('../utils/constants');
 const { errorResponseBody, successResponseBody } = require('../utils/responsebody');
+const User = require("../models/user.model");
+const Movie = require("../models/movie.model");
+const Theatre = require("../models/theatre.model");
+const axios = require("axios");
 
 const create = async (req, res) => {
     try {
@@ -18,8 +22,20 @@ const create = async (req, res) => {
             return res.status(STATUS.PAYMENT_REQUIRED).json(errorResponseBody);
         }
 
+        const user = await User.findById(response.userId);
+        const movie = await Movie.findById(response.movieId);
+        const theatre = await Theatre.findById(response.theatreId);
+
         successResponseBody.data = response;
         successResponseBody.message = 'Booking completed successfully';
+
+        axios.post(process.env.NOTI_SERVICE + "/notiservice/api/v1/notifications", {
+            subject: "Your Booking is Successfull",
+            recepientEmails: [user.email],
+            content: `Your booking for ${movie.name} in ${theatre.name} for ${response.noOfSeats} seats on ${response.timing} is confirmed.
+            Your Booking Id is ${response.id}`
+        });
+
         return res.status(STATUS.OK).json(successResponseBody);
 
     } catch (error) {
@@ -28,7 +44,7 @@ const create = async (req, res) => {
             return res.status(error.code).json(errorResponseBody);
         }
         errorResponseBody.err = error;
-        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
+        return res.status(STATUS.INTERNAL_SEVER_ERROR).json(errorResponseBody);
     }
 }
 
